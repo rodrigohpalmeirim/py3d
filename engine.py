@@ -2,9 +2,6 @@ from graphics import GraphWin, Point, Line
 from math import sin, cos, radians
 from time import sleep
 
-w = GraphWin("Test", 500, 500, autoflush=False)
-w.setBackground("black")
-
 class Solid:
     def __init__(self, vertices, connections):
         self.vertices = vertices
@@ -15,7 +12,7 @@ class Solid:
             l = Line(Point(self.vertices[c[0]][0], self.vertices[c[0]][1]), Point(self.vertices[c[1]][0], self.vertices[c[1]][1]))
             l.draw(window)
             l.setOutline(color)
-        w.update()
+        window.update()
     
     def move(self, x, y=0, z=0):
         for key, vertex in self.vertices.items():
@@ -51,6 +48,20 @@ class Solid:
         y = sum(vertex[1] for key, vertex in self.vertices.items())/len(self.vertices)
         z = sum(vertex[2] for key, vertex in self.vertices.items())/len(self.vertices)
         return (x, y, z)
+
+
+def merge(obj1, obj2):
+    vertices = {}
+    connections = []
+    for key, vertex in obj1.vertices.items():
+        vertices["1_"+str(key)] = vertex
+    for key, vertex in obj2.vertices.items():
+        vertices["2_"+str(key)] = vertex
+    for c in obj1.connections:
+        connections.append(["1_"+str(c[0]), "1_"+str(c[1])])
+    for c in obj2.connections:
+        connections.append(["2_"+str(c[0]), "2_"+str(c[1])])
+    return Solid(vertices, connections)
 
 
 def clear(window):

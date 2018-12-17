@@ -1,5 +1,8 @@
 from engine import *
 
+w = GraphWin("Test", 500, 500, autoflush=False)
+w.setBackground("black")
+
 cube = Solid({
     1: [0, 0, 0],
     2: [100, 0, 0],
@@ -51,19 +54,18 @@ T = Solid({
     [13, 14], [14, 15], [15, 16], [16, 13]
 ])
 
-T.move(200, 200)
-
-T.scale(T.center(), "x", 2)
-T.scale(T.center(), "y", 2)
-T.scale(T.center(), "z", 2)
+piramid.move(0, 0, 100)
+thing = merge(cube, piramid)
+thing.move(100, 100)
+thing.draw(w)
 
 for i in range(10000):
     clear(w)
-    T.rotate(T.center(), "x", radians(2/3))
-    T.rotate(T.center(), "z", radians(1))
-    T.rotate(T.center(), "y", radians(1))
-    #T.rotate((250, 250, 50), "z", radians(1/2))
-    T.draw(w, "white")
+    thing.rotate(thing.center(), "x", radians(2/3))
+    thing.rotate(thing.center(), "z", radians(1))
+    thing.rotate(thing.center(), "y", radians(1))
+    thing.rotate((250, 250, 50), "z", radians(1/2))
+    thing.draw(w, "white")
     sleep(0.01)
 
 w.getMouse()
