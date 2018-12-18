@@ -1,5 +1,5 @@
-from graphics import GraphWin, Point, Line
-from math import sin, cos, radians
+from graphics import GraphWin, Point, Line, Text
+from math import sin, cos, tan, radians
 from time import sleep
 
 class Solid:
@@ -8,8 +8,14 @@ class Solid:
         self.connections = connections
 
     def draw(self, window, color="gray"):
+        field_of_view = radians(90)
+        focal_length = (min(window.getHeight(), window.getWidth())/2) * tan(field_of_view/2)
         for c in self.connections:
-            l = Line(Point(self.vertices[c[0]][0], self.vertices[c[0]][1]), Point(self.vertices[c[1]][0], self.vertices[c[1]][1]))
+            screen_x1 = (self.vertices[c[0]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[0]][2] + (window.getWidth()/2)
+            screen_y1 = (self.vertices[c[0]][1]-(window.getHeight()/2)) * focal_length/self.vertices[c[0]][2] + (window.getHeight()/2)
+            screen_x2 = (self.vertices[c[1]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[1]][2] + (window.getWidth()/2)
+            screen_y2 = (self.vertices[c[1]][1]-(window.getHeight()/2)) * focal_length/self.vertices[c[1]][2] + (window.getHeight()/2)
+            l = Line(Point(screen_x1, screen_y1), Point(screen_x2, screen_y2))
             l.draw(window)
             l.setOutline(color)
         window.update()

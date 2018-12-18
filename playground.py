@@ -1,4 +1,6 @@
 from engine import *
+import random
+from math import pi
 
 w = GraphWin("Test", 500, 500, autoflush=False)
 w.setBackground("black")
@@ -54,17 +56,21 @@ T = Solid({
     [13, 14], [14, 15], [15, 16], [16, 13]
 ])
 
-piramid.move(0, 0, 100)
-thing = merge(cube, piramid)
-thing.move(100, 100)
+thing = cube
+thing.move(200, 200, 200)
+
 thing.draw(w)
+
+rand1 = random.random()*2*pi
+rand2 = random.random()*2*pi
+rand3 = random.random()*2*pi
 
 for i in range(10000):
     clear(w)
-    thing.rotate(thing.center(), "x", radians(2/3))
-    thing.rotate(thing.center(), "z", radians(1))
-    thing.rotate(thing.center(), "y", radians(1))
-    thing.rotate((250, 250, 50), "z", radians(1/2))
+    thing.rotate(thing.center(), "x", radians(sin(i/100*(rand1/4)+rand2)*2))
+    thing.rotate(thing.center(), "z", radians(sin(i/100*(rand2/4)+rand3)*2))
+    thing.rotate(thing.center(), "y", radians(sin(i/100*(rand3/4)+rand1)*2))
+    thing.rotate((250, 250, 50), "z", radians(0))
     thing.draw(w, "white")
     sleep(0.01)
 
