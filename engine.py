@@ -8,7 +8,7 @@ class Solid:
         self.vertices = vertices
         self.connections = connections
 
-    def draw(self, window, color="gray", update=True):
+    def draw(self, window, color="gray", width = 1,update=True):
         focal_length = (min(window.getHeight(), window.getWidth())/2) / tan(field_of_view/2)
         for c in self.connections:
             screen_x1 = (self.vertices[c[0]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[0]][2] + (window.getWidth()/2)
@@ -18,6 +18,7 @@ class Solid:
             l = Line(Point(screen_x1, screen_y1), Point(screen_x2, screen_y2))
             l.draw(window)
             l.setOutline(color)
+            l.setWidth(width)
         if update:
             window.update()
     

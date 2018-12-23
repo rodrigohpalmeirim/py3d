@@ -81,8 +81,8 @@ T = Solid({
     [13, 14], [14, 15], [15, 16], [16, 13]
 ])
 
-grid_spacing = 100
-grid_size = 3*w.getWidth()
+grid_spacing = w.getWidth()//10
+grid_size = 2*w.getWidth()
 
 grid_points = {}
 grid_connections = []
@@ -140,8 +140,8 @@ while True:
     thing.rotate(thing.center(), "z", tick_duration*sin(i*0.01*(rand2/4)+rand3)*2)
     thing.rotate(thing.center(), "y", tick_duration*sin(i*0.01*(rand3/4)+rand1)*2)
     
-    grid.draw(w, update=False)
-    thing.draw(w, "white", update=False)
+    grid.draw(w, width=2, update=False)
+    thing.draw(w, "white", width=3, update=False)
     
     fps = Text(Point(20, 15), round(1/(sum(last_tick_durations)/len(last_tick_durations)), 1))
     fps.setTextColor("white")
