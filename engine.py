@@ -1,15 +1,15 @@
-from graphics import GraphWin, Point, Line, Text
+from graphics import GraphWin, Point, Line
 from math import sin, cos, tan, radians
-from time import sleep
+
+field_of_view = radians(90)
 
 class Solid:
     def __init__(self, vertices, connections):
         self.vertices = vertices
         self.connections = connections
 
-    def draw(self, window, color="gray"):
-        field_of_view = radians(90)
-        focal_length = (min(window.getHeight(), window.getWidth())/2) * tan(field_of_view/2)
+    def draw(self, window, color="gray", update=True):
+        focal_length = (min(window.getHeight(), window.getWidth())/2) / tan(field_of_view/2)
         for c in self.connections:
             screen_x1 = (self.vertices[c[0]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[0]][2] + (window.getWidth()/2)
             screen_y1 = (self.vertices[c[0]][1]-(window.getHeight()/2)) * focal_length/self.vertices[c[0]][2] + (window.getHeight()/2)
@@ -18,7 +18,8 @@ class Solid:
             l = Line(Point(screen_x1, screen_y1), Point(screen_x2, screen_y2))
             l.draw(window)
             l.setOutline(color)
-        window.update()
+        if update:
+            window.update()
     
     def move(self, x, y=0, z=0):
         for key, vertex in self.vertices.items():
@@ -68,8 +69,3 @@ def merge(obj1, obj2):
     for c in obj2.connections:
         connections.append(["2_"+str(c[0]), "2_"+str(c[1])])
     return Solid(vertices, connections)
-
-
-def clear(window):
-    for item in window.items[:]:
-        item.undraw()
