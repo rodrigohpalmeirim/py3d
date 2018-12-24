@@ -82,7 +82,7 @@ T = Solid({
 ])
 
 grid_spacing = w.getWidth()//10
-grid_size = 2*w.getWidth()
+grid_size = 3*w.getWidth()
 
 grid_points = {}
 grid_connections = []
@@ -95,10 +95,8 @@ for i, pos in enumerate(range(0, grid_size+1, grid_spacing)):
     grid_connections += [[index, index+1], [index+2, index+3]]
 
 grid = Solid(grid_points, grid_connections)
-
 grid.move(0, 0, 1)
-
-grid.draw(w, "gray")
+grid.draw(w, "gray", width=2, update=False)
 
 thing = cube
 thing.move(w.getWidth()//2-50, w.getHeight()//2-50, 150)
@@ -113,7 +111,6 @@ last_tick_durations = []
 
 max_fps = 60
 
-i = 0
 while True:
 
     tick_duration = time.time()-last_time
@@ -135,12 +132,9 @@ while True:
         w.update()
         continue
 
-    clear(w, update=False)
-    thing.rotate(thing.center(), "x", tick_duration*sin(i*0.01*(rand1/4)+rand2)*2)
-    thing.rotate(thing.center(), "z", tick_duration*sin(i*0.01*(rand2/4)+rand3)*2)
-    thing.rotate(thing.center(), "y", tick_duration*sin(i*0.01*(rand3/4)+rand1)*2)
-    
-    grid.draw(w, width=2, update=False)
+    thing.rotate(thing.center(), "x", tick_duration*sin(last_time*0.5*(rand1/4)+rand2)*2)
+    thing.rotate(thing.center(), "z", tick_duration*sin(last_time*0.5*(rand2/4)+rand3)*2)
+    thing.rotate(thing.center(), "y", tick_duration*sin(last_time*0.5*(rand3/4)+rand1)*2)
     thing.draw(w, "white", width=3, update=False)
     
     fps = Text(Point(20, 15), round(1/(sum(last_tick_durations)/len(last_tick_durations)), 1))
@@ -148,7 +142,4 @@ while True:
     fps.draw(w)
     w.update()
     fps.undraw()
-
-    i += 1
-
-w.getMouse()
+    thing.undraw()

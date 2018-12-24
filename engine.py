@@ -7,6 +7,7 @@ class Solid:
     def __init__(self, vertices, connections):
         self.vertices = vertices
         self.connections = connections
+        self.items = []
 
     def draw(self, window, color="gray", width = 1,update=True):
         focal_length = (min(window.getHeight(), window.getWidth())/2) / tan(field_of_view/2)
@@ -19,8 +20,14 @@ class Solid:
             l.draw(window)
             l.setOutline(color)
             l.setWidth(width)
+            self.items.append(l)
         if update:
             window.update()
+    
+    def undraw(self):
+        for item in self.items[:]:
+            item.undraw()
+            self.items.remove(item)
     
     def move(self, x, y=0, z=0):
         for key, vertex in self.vertices.items():
