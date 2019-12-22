@@ -1,6 +1,6 @@
 from engine import *
 import random, sys, time
-from math import pi
+from math import pi, sqrt
 from graphics import Text
 
 w = GraphWin("Test", 800, 600, autoflush=False)
@@ -81,6 +81,61 @@ T = Solid({
     [13, 14], [14, 15], [15, 16], [16, 13]
 ])
 
+octahedron = Solid({
+    1: [50, 0, 0],
+    2: [0, 50, 0],
+    3: [0, 0, 50],
+    4: [-50, 0, 0],
+    5: [0, -50, 0],
+    6: [0, 0, -50],
+}, [
+    [1, 2], [1, 3], [1, 5], [1, 6],
+    [2, 3], [2, 4], [2, 6],
+    [3, 4], [3, 5],
+    [4, 5], [4, 6],
+    [5, 6]
+])
+
+golden_ratio = (1+sqrt(5))/2
+
+dodecahedron = Solid({
+    1: [50, 50, 50],
+    2: [50, 50, -50],
+    3: [50, -50, 50],
+    4: [50, -50, -50],
+    5: [-50, 50, 50],
+    6: [-50, 50, -50],
+    7: [-50, -50, 50],
+    8: [-50, -50, -50],
+    9: [0, 50*golden_ratio, 50/golden_ratio],
+    10: [0, 50*golden_ratio, -50/golden_ratio],
+    11: [0, -50*golden_ratio, 50/golden_ratio],
+    12: [0, -50*golden_ratio, -50/golden_ratio],
+    13: [50/golden_ratio, 0, 50*golden_ratio],
+    14: [50/golden_ratio, 0, -50*golden_ratio],
+    15: [-50/golden_ratio, 0, 50*golden_ratio],
+    16: [-50/golden_ratio, 0, -50*golden_ratio],
+    17: [50*golden_ratio, 50/golden_ratio, 0],
+    18: [50*golden_ratio, -50/golden_ratio, 0],
+    19: [-50*golden_ratio, 50/golden_ratio, 0],
+    20: [-50*golden_ratio, -50/golden_ratio, 0],
+}, [
+    [1, 9], [1, 13], [1, 17],
+    [2, 10], [2, 14], [2, 17],
+    [3, 11], [3, 13], [3, 18],
+    [4, 12], [4, 14], [4, 18],
+    [5, 9], [5, 15], [5, 19],
+    [6, 10], [6, 16], [6, 19],
+    [7, 11], [7, 15], [7, 20],
+    [8, 12], [8, 16], [8, 20],
+    [9, 10],
+    [11, 12],
+    [13, 15],
+    [14, 16],
+    [17, 18],
+    [19, 20]
+])
+
 grid_spacing = w.getWidth()//10
 grid_size = 3*w.getWidth()
 
@@ -98,8 +153,8 @@ grid = Solid(grid_points, grid_connections)
 grid.move(0, 0, 1)
 grid.draw(w, "gray", width=2, update=False)
 
-thing = cube
-thing.move(w.getWidth()//2-50, w.getHeight()//2-50, 150)
+thing = dodecahedron
+thing.move(w.getWidth()//2, w.getHeight()//2, 500)
 
 rand1 = random.random()*2*pi
 rand2 = random.random()*2*pi
@@ -129,7 +184,9 @@ while True:
 
     if paused:
         time.sleep(0.05)
+        thing.draw(w, "white", width=3, update=False)
         w.update()
+        thing.undraw()
         continue
 
     thing.rotate(thing.center(), "x", tick_duration*sin(last_time*0.5*(rand1/4)+rand2)*2)

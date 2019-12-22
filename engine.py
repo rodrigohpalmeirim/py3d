@@ -1,7 +1,7 @@
 from graphics import GraphWin, Point, Line
 from math import sin, cos, tan, radians
 
-field_of_view = radians(90)
+field_of_view = radians(45)
 
 class Solid:
     def __init__(self, vertices, connections):
