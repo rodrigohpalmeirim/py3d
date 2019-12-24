@@ -9,13 +9,16 @@ class Solid:
         self.connections = connections
         self.items = []
 
-    def draw(self, window, color="gray", width = 1,update=True):
+    def draw(self, window, color="gray", width=1, update=True):
         focal_length = (min(window.getHeight(), window.getWidth())/2) / tan(field_of_view/2)
+        window_width, window_height = window.getWidth(), window.getHeight()
         for c in self.connections:
-            screen_x1 = (self.vertices[c[0]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[0]][2] + (window.getWidth()/2)
-            screen_y1 = (self.vertices[c[0]][1]-(window.getHeight()/2)) * focal_length/self.vertices[c[0]][2] + (window.getHeight()/2)
-            screen_x2 = (self.vertices[c[1]][0]-(window.getWidth()/2)) * focal_length/self.vertices[c[1]][2] + (window.getWidth()/2)
-            screen_y2 = (self.vertices[c[1]][1]-(window.getHeight()/2)) * focal_length/self.vertices[c[1]][2] + (window.getHeight()/2)
+            x1, y1, z1 = self.vertices[c[0]]
+            x2, y2, z2 = self.vertices[c[1]]
+            screen_x1 = (x1-(window_width/2)) * focal_length/z1 + (window_width/2)
+            screen_y1 = (y1-(window_height/2)) * focal_length/z1 + (window_height/2)
+            screen_x2 = (x2-(window_width/2)) * focal_length/z2 + (window_width/2)
+            screen_y2 = (y2-(window_height/2)) * focal_length/z2 + (window_height/2)
             l = Line(Point(screen_x1, screen_y1), Point(screen_x2, screen_y2))
             l.draw(window)
             l.setOutline(color)
@@ -35,33 +38,33 @@ class Solid:
             vertex[1] += y
             vertex[2] += z
     
-    def rotate(self, center, axis, angle):
+    def rotate(self, center, angle_x, angle_y=0, angle_z=0):
         for key, vertex in self.vertices.items():
             vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
-            if axis == "x":
-                vertex[1] = center[1] + vector[1]*cos(angle) - vector[2]*sin(angle)
-                vertex[2] = center[2] + vector[1]*sin(angle) + vector[2]*cos(angle)
-            if axis == "y":
-                vertex[0] = center[0] + vector[0]*cos(angle) - vector[2]*sin(angle)
-                vertex[2] = center[2] + vector[0]*sin(angle) + vector[2]*cos(angle)
-            if axis == "z":
-                vertex[0] = center[0] + vector[0]*cos(angle) - vector[1]*sin(angle)
-                vertex[1] = center[1] + vector[0]*sin(angle) + vector[1]*cos(angle)
+            vertex[1] = center[1] + vector[1]*cos(angle_x) - vector[2]*sin(angle_x)
+            vertex[2] = center[2] + vector[1]*sin(angle_x) + vector[2]*cos(angle_x)
+            
+            vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
+            vertex[0] = center[0] + vector[0]*cos(angle_y) - vector[2]*sin(angle_y)
+            vertex[2] = center[2] + vector[0]*sin(angle_y) + vector[2]*cos(angle_y)
+            
+            vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
+            vertex[0] = center[0] + vector[0]*cos(angle_z) - vector[1]*sin(angle_z)
+            vertex[1] = center[1] + vector[0]*sin(angle_z) + vector[1]*cos(angle_z)
     
-    def scale(self, center, axis, scale):
-        for key, vertex in self.vertices.items():
+    def scale(self, center, scale_x, scale_y=0, scale_z=0):
+        for key, vertex in self.vertices:
             vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
-            if axis == "x":
-                vertex[0] = center[0] + vector[0]*scale
-            if axis == "y":
-                vertex[1] = center[1] + vector[1]*scale
-            if axis == "z":
-                vertex[2] = center[2] + vector[2]*scale
+            vertex[0] = center[0] + vector[0]*scale_x
+            vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
+            vertex[1] = center[1] + vector[1]*scale_y
+            vector = [vertex[0]-center[0], vertex[1]-center[1], vertex[2]-center[2]]
+            vertex[2] = center[2] + vector[2]*scale_z
 
     def center(self):
-        x = sum(vertex[0] for key, vertex in self.vertices.items())/len(self.vertices)
-        y = sum(vertex[1] for key, vertex in self.vertices.items())/len(self.vertices)
-        z = sum(vertex[2] for key, vertex in self.vertices.items())/len(self.vertices)
+        x = sum(vertex[0] for key, vertex in self.vertices.items()) / len(self.vertices)
+        y = sum(vertex[1] for key, vertex in self.vertices.items()) / len(self.vertices)
+        z = sum(vertex[2] for key, vertex in self.vertices.items()) / len(self.vertices)
         return (x, y, z)
 
 

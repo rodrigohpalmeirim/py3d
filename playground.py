@@ -189,9 +189,10 @@ while True:
         thing.undraw()
         continue
 
-    thing.rotate(thing.center(), "x", tick_duration*sin(last_time*0.5*(rand1/4)+rand2)*2)
-    thing.rotate(thing.center(), "z", tick_duration*sin(last_time*0.5*(rand2/4)+rand3)*2)
-    thing.rotate(thing.center(), "y", tick_duration*sin(last_time*0.5*(rand3/4)+rand1)*2)
+    thing.rotate(thing.center(), tick_duration*sin(last_time*0.5*(rand1/4)+rand2)*2,
+                                 tick_duration*sin(last_time*0.5*(rand2/4)+rand3)*2,
+                                 tick_duration*sin(last_time*0.5*(rand3/4)+rand1)*2)
+                                 
     thing.draw(w, "white", width=3, update=False)
     
     fps = Text(Point(20, 15), round(1/(sum(last_tick_durations)/len(last_tick_durations)), 1))
